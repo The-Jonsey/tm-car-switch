@@ -11,7 +11,7 @@ bool Setting_Black_Market_Enabled;
 bool InMap() {
     auto App = cast<CTrackMania>(GetApp());
 
-    return App.PlaygroundScript != null && App.RootMap != null;
+    return App.PlaygroundScript !is null && App.RootMap !is null;
 }
 
 
@@ -35,7 +35,7 @@ void Main() {
           ModelId = 0xffffffff;
         }
       	auto Player = Mode.GetPlayerFromLogin(App.LocalPlayerInfo.Login);
-        if (Player == null) {
+        if (Player is null) {
           continue;
         }
         if (Player.ForceModelId != ModelId) {
