@@ -21,6 +21,7 @@ void Main() {
 
   if (!hasPermissions) {
     UI::ShowNotification("Car Switcher", "You need standard / club access to use this plugin!", 15000);
+    return;
   }
 
   auto App = cast<CTrackMania>(GetApp());
