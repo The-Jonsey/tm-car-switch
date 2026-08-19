@@ -5,6 +5,8 @@ string LoadedModel = "";
 
 bool isSwitching = false;
 
+const bool hasPermissions = OpenplanetHasPaidPermissions();
+
 [Setting name="Black Market Enabled"]
 bool Setting_Black_Market_Enabled;
 
@@ -16,6 +18,11 @@ bool InMap() {
 
 
 void Main() {
+
+  if (!hasPermissions) {
+    UI::ShowNotification("Car Switcher", "You need standard / club access to use this plugin!", 15000);
+  }
+
   auto App = cast<CTrackMania>(GetApp());
 
   while (true) {
@@ -113,6 +120,7 @@ void ReloadCurrentMap() {
     while (resp.IsProcessing) yield();
     if (resp.HasFailed || !resp.HasSucceeded) {
       warn('GetMapFromUid failed: ' + resp.ErrorCode + ", " + resp.ErrorType + ", " + resp.ErrorDescription);
+      UI::ShowNotification("Car Switcher", "Failed to re-open map, please try again", 15000);
       App.MenuManager.MenuCustom_CurrentManiaApp.DataFileMgr.TaskResult_Release(resp.Id);
       return;
     }
@@ -123,6 +131,9 @@ void ReloadCurrentMap() {
 }
 
 void RenderMenu() {
+  if (!hasPermissions) {
+    return;
+  }
   if (InMap()) {
     if (UI::BeginMenu("Car Switcher")) {
           auto currCar = DesiredModelId;
